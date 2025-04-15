@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>60-Day Data Engineering Interview Prep</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 2rem;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    :root {
+      --bg: #1f2937;
+      --text: #f9fafb;
+      --card: #111827;
+      --highlight: #facc15;
+      --done: #9ca3af;
+    }
+    .light-mode {
+      --bg: #f9fafb;
+      --text: #1f2937;
+      --card: #ffffff;
+      --highlight: #d97706;
+      --done: #6b7280;
+    }
+    h1, h2 {
+      text-align: center;
+      color: var(--text);
+    }
+    .toggle {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .toggle button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #4b5563;
+      color: #fff;
+      cursor: pointer;
+    }
+    .progress-container {
+      background-color: #374151;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 1rem auto;
+      width: 80%;
+      height: 24px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #34d399, #10b981);
+      transition: width 0.4s ease-in-out;
+    }
+    .day {
+      background: var(--card);
+      border-radius: 12px;
+      margin: 1rem 0;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .day h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--highlight);
+    }
+    .topics {
+      margin-bottom: 0.5rem;
+    }
+    .topic {
+      display: flex;
+      align-items: center;
+    }
+    .topic input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    .done {
+      text-decoration: line-through;
+      color: var(--done);
+    }
+  </style>
+</head>
+<body>
+  <h1>🛠️ 60-Day Data Engineering Interview Prep</h1>
+  <div class="toggle">
+    <button onclick="toggleTheme()">Toggle Light/Dark Mode</button>
+  </div>
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div id="days"></div>
+  <script>
+    const studyPlan = Array.from({ length: 60 }, (_, i) => {
+      return {
+        day: `Day ${i + 1}`,
+        topics: [
+          `Topic ${(i % 10) + 1}: <a href='https://example.com'>Sample Link</a>`,
+          `Subtopic ${(i % 5) + 1}`
+        ]
+      }
+    });
+
+    const container = document.getElementById('days');
+    let totalTopics = 0, completed = 0;
+    let savedProgress = JSON.parse(localStorage.getItem('interviewPrepProgress') || '{}');
+
+    studyPlan.forEach(({ day, topics }, dayIndex) => {
+      const div = document.createElement('div');
+      div.className = 'day';
+      div.innerHTML = `<h3>${day}</h3>`;
+      const list = document.createElement('div');
+      list.className = 'topics';
+
+      topics.forEach((topic, topicIndex) => {
+        totalTopics++;
+        const topicId = `d${dayIndex}-t${topicIndex}`;
+        const checked = savedProgress[topicId];
+
+        const topicDiv = document.createElement('div');
+        topicDiv.className = 'topic';
+        topicDiv.innerHTML = `
+          <input type="checkbox" id="${topicId}" ${checked ? 'checked' : ''} onchange="toggleProgress(this, '${topicId}')">
+          <label class="${checked ? 'done' : ''}" for="${topicId}">${topic}</label>
+        `;
+        list.appendChild(topicDiv);
+
+        if (checked) completed++;
+      });
+
+      div.appendChild(list);
+      container.appendChild(div);
+    });
+
+    function updateProgressBar() {
+      document.getElementById('progressBar').style.width = (completed / totalTopics) * 100 + '%';
+    }
+
+    updateProgressBar();
+
+    window.toggleProgress = function (checkbox, id) {
+      const label = checkbox.nextElementSibling;
+      if (checkbox.checked) {
+        completed++;
+        label.classList.add('done');
+        savedProgress[id] = true;
+      } else {
+        completed--;
+        label.classList.remove('done');
+        delete savedProgress[id];
+      }
+      localStorage.setItem('interviewPrepProgress', JSON.stringify(savedProgress));
+      updateProgressBar();
+    };
+
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+    }
+  </script>
+</body>
+</html>
