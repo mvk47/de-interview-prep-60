@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>60-Day Data Engineering Interview Prep</title>
   <style>
     body {
@@ -55,6 +55,11 @@
       width: 0%;
       background: linear-gradient(to right, #34d399, #10b981);
       transition: width 0.4s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #000;
     }
     .day {
       background: var(--card);
@@ -81,6 +86,10 @@
       text-decoration: line-through;
       color: var(--done);
     }
+    a {
+      color: var(--highlight);
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -89,19 +98,72 @@
     <button onclick="toggleTheme()">Toggle Light/Dark Mode</button>
   </div>
   <div class="progress-container">
-    <div class="progress-bar" id="progressBar"></div>
+    <div class="progress-bar" id="progressBar">0%</div>
   </div>
   <div id="days"></div>
   <script>
-    const studyPlan = Array.from({ length: 60 }, (_, i) => {
-      return {
-        day: `Day ${i + 1}`,
-        topics: [
-          `Topic ${(i % 10) + 1}: <a href='https://example.com'>Sample Link</a>`,
-          `Subtopic ${(i % 5) + 1}`
-        ]
-      }
-    });
+    const studyPlan = [
+      { day: "Day 1", topics: ["Intro to Data Engineering", "Roles & Responsibilities of Data Engineers", "Overview of Data Pipelines"] },
+      { day: "Day 2", topics: ["SQL Basics", "Database Design", "Joins and Aggregations"] },
+      { day: "Day 3", topics: ["Normalization and Denormalization", "Indexing in Databases"] },
+      { day: "Day 4", topics: ["Data Warehousing Concepts", "OLAP vs OLTP"] },
+      { day: "Day 5", topics: ["Introduction to ETL", "ETL Tools Overview (Apache NiFi, Airflow, Talend)"] },
+      { day: "Day 6", topics: ["Data Transformation Techniques", "Data Cleansing and Preprocessing"] },
+      { day: "Day 7", topics: ["Data Storage: Relational Databases", "Non-relational Databases (NoSQL: MongoDB, Cassandra, etc.)"] },
+      { day: "Day 8", topics: ["Hadoop Ecosystem: HDFS, YARN, MapReduce", "Overview of Big Data"] },
+      { day: "Day 9", topics: ["Apache Spark Basics", "RDDs and DataFrames in Spark", "Spark SQL"] },
+      { day: "Day 10", topics: ["Apache Kafka Overview", "Message Queues in Data Engineering", "Stream Processing Concepts"] },
+      { day: "Day 11", topics: ["Airflow for Scheduling", "Task Automation in Data Pipelines"] },
+      { day: "Day 12", topics: ["Data Lake Concepts", "Benefits and Challenges of Data Lakes"] },
+      { day: "Day 13", topics: ["Cloud Computing Overview", "AWS, Azure, and Google Cloud for Data Engineering"] },
+      { day: "Day 14", topics: ["AWS S3 for Data Storage", "AWS Redshift for Data Warehousing"] },
+      { day: "Day 15", topics: ["ETL in Cloud", "Azure Data Factory", "Google Dataflow"] },
+      { day: "Day 16", topics: ["Serverless Architectures in Data Engineering", "AWS Lambda and Google Cloud Functions"] },
+      { day: "Day 17", topics: ["Data Versioning", "Data Provenance"] },
+      { day: "Day 18", topics: ["Containerization with Docker", "Kubernetes for Orchestration"] },
+      { day: "Day 19", topics: ["Data Security in Data Engineering", "Encryption and Data Masking"] },
+      { day: "Day 20", topics: ["Data Governance", "Regulations and Compliance (GDPR, CCPA)"] },
+      { day: "Day 21", topics: ["Advanced SQL Techniques", "Window Functions, Common Table Expressions"] },
+      { day: "Day 22", topics: ["Database Optimization", "Query Optimization and Indexing"] },
+      { day: "Day 23", topics: ["Data Pipelines in Real-Time", "Streaming Data with Apache Kafka and Spark"] },
+      { day: "Day 24", topics: ["Building and Managing Data Pipelines", "Error Handling in Pipelines"] },
+      { day: "Day 25", topics: ["ETL Testing and Debugging", "Monitoring Data Pipelines"] },
+      { day: "Day 26", topics: ["Advanced Data Storage", "Columnar vs Row-based Storage"] },
+      { day: "Day 27", topics: ["Data Quality", "Data Validation"] },
+      { day: "Day 28", topics: ["Data Archiving and Purging", "Data Retention Policies"] },
+      { day: "Day 29", topics: ["Batch vs Stream Processing", "When to Use Batch or Stream"] },
+      { day: "Day 30", topics: ["Serverless Architectures for Data Engineering", "AWS Lambda for Data Processing"] },
+      { day: "Day 31", topics: ["Introduction to Machine Learning in Data Engineering", "Building Pipelines for ML"] },
+      { day: "Day 32", topics: ["Data Science vs Data Engineering", "How Data Engineers Support ML Models"] },
+      { day: "Day 33", topics: ["Data Wrangling Techniques", "Using Python and Pandas"] },
+      { day: "Day 34", topics: ["Data Modeling", "Dimensional Modeling, Star Schema, Snowflake Schema"] },
+      { day: "Day 35", topics: ["Introduction to Data Lakes", "Building Data Lakes on AWS"] },
+      { day: "Day 36", topics: ["ETL Tools: Apache NiFi", "Integrating NiFi into Data Pipelines"] },
+      { day: "Day 37", topics: ["Stream Processing with Apache Flink", "Data Processing at Scale"] },
+      { day: "Day 38", topics: ["ETL in the Cloud", "Using AWS Glue"] },
+      { day: "Day 39", topics: ["Using AWS Data Pipeline", "Scheduling Tasks in AWS"] },
+      { day: "Day 40", topics: ["Data Integration Challenges", "Solving Schema Evolution"] },
+      { day: "Day 41", topics: ["Data Analytics for Engineers", "Overview of BI Tools"] },
+      { day: "Day 42", topics: ["Big Data Storage Techniques", "Data Partitioning in Hadoop and Spark"] },
+      { day: "Day 43", topics: ["Exploring Apache HBase", "Column Family Design"] },
+      { day: "Day 44", topics: ["Data Warehouse Automation", "Automating Data ETL Processes"] },
+      { day: "Day 45", topics: ["Data Modeling in Cloud Environments", "Cloud-based Data Warehouses"] },
+      { day: "Day 46", topics: ["APIs for Data Engineering", "Building REST APIs"] },
+      { day: "Day 47", topics: ["Data Visualization Basics", "Using Tableau and Power BI"] },
+      { day: "Day 48", topics: ["Managing Data Consistency", "Data Availability vs Consistency"] },
+      { day: "Day 49", topics: ["Load Testing Data Pipelines", "Stress Testing for Scalability"] },
+      { day: "Day 50", topics: ["Optimization of Big Data Systems", "Distributed Computing"] },
+      { day: "Day 51", topics: ["Machine Learning for Engineers", "Supervised Learning Techniques"] },
+      { day: "Day 52", topics: ["Deep Dive into Spark MLlib", "Using MLlib for Data Processing"] },
+      { day: "Day 53", topics: ["Building REST APIs with Flask", "Connecting APIs to Data Pipelines"] },
+      { day: "Day 54", topics: ["Working with Cloud Data Warehouses", "Snowflake Data Warehouses"] },
+      { day: "Day 55", topics: ["Scalable ETL with Apache Beam", "Data Pipelines at Scale"] },
+      { day: "Day 56", topics: ["BigQuery and Data Warehousing", "Setting Up and Querying Data in BigQuery"] },
+      { day: "Day 57", topics: ["Building Real-Time Data Pipelines", "Handling Streaming Data"] },
+      { day: "Day 58", topics: ["Cloud Data Storage Options", "AWS S3 vs Google Cloud Storage"] },
+      { day: "Day 59", topics: ["Big Data Batch Processing", "Writing Spark Jobs for Batch Processing"] },
+      { day: "Day 60", topics: ["Data Engineering Interview Mock Test", "Final Review of Key Concepts"] }
+    ];
 
     const container = document.getElementById('days');
     let totalTopics = 0, completed = 0;
@@ -135,7 +197,10 @@
     });
 
     function updateProgressBar() {
-      document.getElementById('progressBar').style.width = (completed / totalTopics) * 100 + '%';
+      const percent = Math.round((completed / totalTopics) * 100);
+      const progressBar = document.getElementById('progressBar');
+      progressBar.style.width = percent + '%';
+      progressBar.textContent = `${completed}/${totalTopics} Topics (${percent}%)`;
     }
 
     updateProgressBar();
